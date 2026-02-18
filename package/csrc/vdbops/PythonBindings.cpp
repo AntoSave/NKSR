@@ -9,8 +9,29 @@ using IndexGridDevice = SparseFeatureIndexGrid<fvdb::PytorchDeviceBuffer>;
 
 namespace pybind11 {namespace detail {
 template <>
-struct type_caster<nanovdb::Coord>
- : array_caster<nanovdb::Coord, int32_t, false, 3> { };
+struct type_caster<nanovdb::Coord> {
+public:
+    PYBIND11_TYPE_CASTER(nanovdb::Coord, _("nanovdb.Coord"));
+
+    bool load(handle src, bool) {
+        if (!py::isinstance<py::sequence>(src)) {
+            return false;
+        }
+        auto seq = py::reinterpret_borrow<py::sequence>(src);
+        if (seq.size() != 3) {
+            return false;
+        }
+        int32_t x = py::cast<int32_t>(seq[0]);
+        int32_t y = py::cast<int32_t>(seq[1]);
+        int32_t z = py::cast<int32_t>(seq[2]);
+        value = nanovdb::Coord(x, y, z);
+        return true;
+    }
+
+    static handle cast(const nanovdb::Coord& src, return_value_policy, handle) {
+        return py::make_tuple(src[0], src[1], src[2]).release();
+    }
+};
 }}
 
 

@@ -1,8 +1,7 @@
---extra-index-url https://download.pytorch.org/whl/cu128
-torch==2.7.0+cu128
+--extra-index-url https://download.pytorch.org/whl/cu130
+torch
 torchvision
 
--f https://data.pyg.org/whl/torch-2.8.0+cu128.html
 torch-scatter
 
 python-pycg>=1.0.1
